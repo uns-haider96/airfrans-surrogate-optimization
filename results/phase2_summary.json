@@ -1,0 +1,164 @@
+{
+  "eval": {
+    "pair_daoa": 1.0,
+    "pair_dre": 500000.0,
+    "pair_min_rel": 0.05,
+    "bl_stations": [
+      0.2,
+      0.5,
+      0.8
+    ],
+    "bl_height": 0.04
+  },
+  "force_table": [
+    {
+      "model": "pointwise, raw",
+      "CD rel. err (mean \u00b1 std)": "23.210 \u00b1 11.877",
+      "CD rel. err (median)": "22.112",
+      "CL rel. err (mean \u00b1 std)": "0.296 \u00b1 0.738",
+      "CL rel. err (median)": "0.104",
+      "\u03c1_D": "-0.015",
+      "\u03c1_L": "0.985",
+      "\u03c1_L/D": "0.860"
+    },
+    {
+      "model": "pointwise, no-slip",
+      "CD rel. err (mean \u00b1 std)": "23.332 \u00b1 11.967",
+      "CD rel. err (median)": "22.139",
+      "CL rel. err (mean \u00b1 std)": "0.296 \u00b1 0.737",
+      "CL rel. err (median)": "0.107",
+      "\u03c1_D": "-0.019",
+      "\u03c1_L": "0.985",
+      "\u03c1_L/D": "0.860"
+    },
+    {
+      "model": "shape-aware, raw",
+      "CD rel. err (mean \u00b1 std)": "18.158 \u00b1 7.815",
+      "CD rel. err (median)": "17.187",
+      "CL rel. err (mean \u00b1 std)": "0.096 \u00b1 0.221",
+      "CL rel. err (median)": "0.026",
+      "\u03c1_D": "0.077",
+      "\u03c1_L": "0.998",
+      "\u03c1_L/D": "0.882"
+    },
+    {
+      "model": "shape-aware, no-slip",
+      "CD rel. err (mean \u00b1 std)": "18.153 \u00b1 7.832",
+      "CD rel. err (median)": "17.152",
+      "CL rel. err (mean \u00b1 std)": "0.096 \u00b1 0.220",
+      "CL rel. err (median)": "0.026",
+      "\u03c1_D": "0.075",
+      "\u03c1_L": "0.998",
+      "\u03c1_L/D": "0.883"
+    }
+  ],
+  "drag_split_median": {
+    "pointwise, raw": {
+      "pressure drag CDp": 6.980126418892656,
+      "viscous drag CDv": 36.13268319739517,
+      "total drag CD": 22.111892031559496
+    },
+    "pointwise, no-slip": {
+      "pressure drag CDp": 6.980126418892656,
+      "viscous drag CDv": 36.26573283912579,
+      "total drag CD": 22.138858865400096
+    },
+    "shape-aware, raw": {
+      "pressure drag CDp": 0.6019785190774247,
+      "viscous drag CDv": 27.08674655836954,
+      "total drag CD": 17.186945054663845
+    },
+    "shape-aware, no-slip": {
+      "pressure drag CDp": 0.6019785190774247,
+      "viscous drag CDv": 27.056649845329197,
+      "total drag CD": 17.151730324349213
+    }
+  },
+  "comparison": [
+    {
+      "model": "AirfRANS MLP (full, 800 cases)",
+      "surface p MSE": 0.113,
+      "CD rel. err": 4.289,
+      "CL rel. err": 0.767,
+      "\u03c1_D": -0.117,
+      "\u03c1_L": 0.913
+    },
+    {
+      "model": "AirfRANS GraphSAGE (scarce, 200 cases)",
+      "surface p MSE": 0.1945,
+      "CD rel. err": 3.504,
+      "CL rel. err": 0.385,
+      "\u03c1_D": -0.139,
+      "\u03c1_L": 0.981
+    },
+    {
+      "model": "This work: pointwise MLP (scarce)",
+      "surface p MSE": 0.9671311974525452,
+      "CD rel. err": 23.331740964255314,
+      "CL rel. err": 0.2955883632815214,
+      "\u03c1_D": -0.019089477236930923,
+      "\u03c1_L": 0.9850176254406362
+    },
+    {
+      "model": "This work: shape-aware MLP (scarce)",
+      "surface p MSE": 0.06342120468616486,
+      "CD rel. err": 18.152609679111325,
+      "CL rel. err": 0.09596352930257758,
+      "\u03c1_D": 0.07455636390909774,
+      "\u03c1_L": 0.997892447311183
+    }
+  ],
+  "pairwise": [
+    {
+      "model": "pointwise, raw",
+      "CL: all pairs": 0.9514070351758794,
+      "CL: comparable": 0.9018789144050104,
+      "CL: comparable & distinguishable": 0.9189814814814815,
+      "CD: all pairs": 0.5006030150753769,
+      "CD: comparable": 0.5762004175365344,
+      "CD: comparable & distinguishable": 0.5706521739130435,
+      "L/D: all pairs": 0.8423618090452262,
+      "L/D: comparable": 0.7390396659707724,
+      "L/D: comparable & distinguishable": 0.7721822541966427
+    },
+    {
+      "model": "pointwise, no-slip",
+      "CL: all pairs": 0.9517587939698492,
+      "CL: comparable": 0.9018789144050104,
+      "CL: comparable & distinguishable": 0.9189814814814815,
+      "CD: all pairs": 0.49899497487437183,
+      "CD: comparable": 0.5803757828810021,
+      "CD: comparable & distinguishable": 0.5760869565217391,
+      "L/D: all pairs": 0.842462311557789,
+      "L/D: comparable": 0.7390396659707724,
+      "L/D: comparable & distinguishable": 0.7721822541966427
+    },
+    {
+      "model": "shape-aware, raw",
+      "CL: all pairs": 0.9842713567839196,
+      "CL: comparable": 0.9707724425887265,
+      "CL: comparable & distinguishable": 0.9884259259259259,
+      "CD: all pairs": 0.5263819095477387,
+      "CD: comparable": 0.6263048016701461,
+      "CD: comparable & distinguishable": 0.657608695652174,
+      "L/D: all pairs": 0.865678391959799,
+      "L/D: comparable": 0.8413361169102297,
+      "L/D: comparable & distinguishable": 0.8848920863309353
+    },
+    {
+      "model": "shape-aware, no-slip",
+      "CL: all pairs": 0.9841708542713568,
+      "CL: comparable": 0.9707724425887265,
+      "CL: comparable & distinguishable": 0.9884259259259259,
+      "CD: all pairs": 0.5257286432160804,
+      "CD: comparable": 0.6283924843423799,
+      "CD: comparable & distinguishable": 0.657608695652174,
+      "L/D: all pairs": 0.8660804020100502,
+      "L/D: comparable": 0.8434237995824635,
+      "L/D: comparable & distinguishable": 0.8848920863309353
+    }
+  ],
+  "n_pairs_total": 19900,
+  "n_pairs_comparable": 479,
+  "example_case": "airFoil2D_SST_44.995_5.582_0.618_7.104_1.0_16.596"
+}

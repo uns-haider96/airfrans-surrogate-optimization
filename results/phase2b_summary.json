@@ -1,0 +1,194 @@
+{
+  "cfg": {
+    "seed": 0,
+    "widths": [
+      32,
+      64
+    ],
+    "weight_decay": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "grid_seeds": 3,
+    "n_members": 10,
+    "epochs": 3000,
+    "lr": 0.003,
+    "gp_restarts": 5
+  },
+  "selected": {
+    "width": 64,
+    "weight_decay": 0.01
+  },
+  "grid": [
+    {
+      "width": 64,
+      "weight_decay": 0.01,
+      "val_mse_cl": 0.0004029507985937637,
+      "val_mse_logcd": 0.6996309348398185,
+      "val_mse": 0.35001694281920614
+    },
+    {
+      "width": 64,
+      "weight_decay": 0.1,
+      "val_mse_cl": 0.00034446422003128345,
+      "val_mse_logcd": 0.702092463308505,
+      "val_mse": 0.3512184637642682
+    },
+    {
+      "width": 32,
+      "weight_decay": 0.01,
+      "val_mse_cl": 0.00037490744960531257,
+      "val_mse_logcd": 0.7066339652702218,
+      "val_mse": 0.3535044363599136
+    },
+    {
+      "width": 32,
+      "weight_decay": 0.1,
+      "val_mse_cl": 0.00036745309091132025,
+      "val_mse_logcd": 0.7097368421838641,
+      "val_mse": 0.35505214763738774
+    },
+    {
+      "width": 64,
+      "weight_decay": 1.0,
+      "val_mse_cl": 0.0001305883332010787,
+      "val_mse_logcd": 0.7181461390143438,
+      "val_mse": 0.35913836367377244
+    },
+    {
+      "width": 32,
+      "weight_decay": 1.0,
+      "val_mse_cl": 0.0001958171975039209,
+      "val_mse_logcd": 0.732085153746223,
+      "val_mse": 0.36614048547186345
+    }
+  ],
+  "accuracy": [
+    {
+      "model": "field: shape-aware MLP",
+      "CD rel. err (mean)": 18.152609679111325,
+      "CD rel. err (median)": 17.151730324349213,
+      "CL rel. err (mean)": 0.09596352930257758,
+      "CL rel. err (median)": 0.02615299121941969,
+      "L/D rel. err (mean)": 0.9345568554951814,
+      "L/D rel. err (median)": 0.9443590764638662,
+      "\u03c1_D": 0.07455636390909774,
+      "\u03c1_L": 0.997892447311183,
+      "\u03c1_L/D": 0.8826145653641342
+    },
+    {
+      "model": "direct: NN ensemble",
+      "CD rel. err (mean)": 0.016010862578185764,
+      "CD rel. err (median)": 0.007520728534909084,
+      "CL rel. err (mean)": 0.02073966799721832,
+      "CL rel. err (median)": 0.005793356492683543,
+      "L/D rel. err (mean)": 0.033422841034218956,
+      "L/D rel. err (median)": 0.012305489149234712,
+      "\u03c1_D": 0.9983169579239481,
+      "\u03c1_L": 0.9998079951998801,
+      "\u03c1_L/D": 0.9967839195979901
+    },
+    {
+      "model": "direct: Gaussian process",
+      "CD rel. err (mean)": 0.00864030390692018,
+      "CD rel. err (median)": 0.00256121824104101,
+      "CL rel. err (mean)": 0.00806447935359558,
+      "CL rel. err (median)": 0.0026109942532701524,
+      "L/D rel. err (mean)": 0.015515654322276409,
+      "L/D rel. err (median)": 0.006529024753890332,
+      "\u03c1_D": 0.9994659866496663,
+      "\u03c1_L": 0.9999264981624542,
+      "\u03c1_L/D": 0.9985194629865748
+    }
+  ],
+  "pairwise": [
+    {
+      "model": "field: shape-aware MLP",
+      "CL: all pairs": 0.9841708542713568,
+      "CL: comparable": 0.9707724425887265,
+      "CL: comparable & distinguishable": 0.9884259259259259,
+      "CD: all pairs": 0.5257286432160804,
+      "CD: comparable": 0.6283924843423799,
+      "CD: comparable & distinguishable": 0.657608695652174,
+      "L/D: all pairs": 0.8660804020100502,
+      "L/D: comparable": 0.8434237995824635,
+      "L/D: comparable & distinguishable": 0.8848920863309353
+    },
+    {
+      "model": "direct: NN ensemble",
+      "CL: all pairs": 0.9966331658291457,
+      "CL: comparable": 0.9895615866388309,
+      "CL: comparable & distinguishable": 0.9976851851851852,
+      "CD: all pairs": 0.9858291457286432,
+      "CD: comparable": 0.9665970772442589,
+      "CD: comparable & distinguishable": 0.9945652173913043,
+      "L/D: all pairs": 0.9823115577889447,
+      "L/D: comparable": 0.9707724425887265,
+      "L/D: comparable & distinguishable": 0.9952038369304557
+    },
+    {
+      "model": "direct: Gaussian process",
+      "CL: all pairs": 0.9984924623115577,
+      "CL: comparable": 1.0,
+      "CL: comparable & distinguishable": 1.0,
+      "CD: all pairs": 0.9934673366834171,
+      "CD: comparable": 0.9832985386221295,
+      "CD: comparable & distinguishable": 1.0,
+      "L/D: all pairs": 0.9895979899497488,
+      "L/D: comparable": 0.9832985386221295,
+      "L/D: comparable & distinguishable": 1.0
+    }
+  ],
+  "calibration": [
+    {
+      "model": "direct: NN ensemble",
+      "target": "CL",
+      "within_1sd": 0.535,
+      "within_2sd": 0.785,
+      "median_sd": 0.0032558494949173683
+    },
+    {
+      "model": "direct: NN ensemble",
+      "target": "log CD",
+      "within_1sd": 0.285,
+      "within_2sd": 0.545,
+      "median_sd": 0.0038976492899991293
+    },
+    {
+      "model": "direct: Gaussian process",
+      "target": "CL",
+      "within_1sd": 0.685,
+      "within_2sd": 0.905,
+      "median_sd": 0.0026017644963813565
+    },
+    {
+      "model": "direct: Gaussian process",
+      "target": "log CD",
+      "within_1sd": 0.745,
+      "within_2sd": 0.905,
+      "median_sd": 0.006155927944786241
+    }
+  ],
+  "gp_kernels": [
+    "3.16**2 * Matern(length_scale=[13, 1e+03, 1e+03, 239, 1e+03, 49.6, 1e+03, 1e+03, 68.2, 1e+03, 72, 33.6, 1e+03, 8.13, 78.7], nu=2.5) + WhiteKernel(noise_level=2.64e-06)",
+    "10**2 * Matern(length_scale=[8.28, 248, 1e+03, 1e+03, 28.6, 1e+03, 112, 1e+03, 1e+03, 1e+03, 34.4, 1e+03, 1e+03, 8.1, 56.2], nu=2.5) + WhiteKernel(noise_level=1e-08)"
+  ],
+  "inputs": [
+    "t",
+    "yc@0.025",
+    "yc@0.05",
+    "yc@0.1",
+    "yc@0.2",
+    "yc@0.3",
+    "yc@0.4",
+    "yc@0.5",
+    "yc@0.6",
+    "yc@0.7",
+    "yc@0.8",
+    "yc@0.9",
+    "yc@0.95",
+    "aoa",
+    "re_M"
+  ]
+}
