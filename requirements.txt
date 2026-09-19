@@ -1,0 +1,4 @@
+# Phases 0-4 run on Google Colab; these are the only non-default packages required.
+airfrans
+pyvista==0.48.0    # 0.49+ requires a newer IPython than Colab provides
+vtk<9.7
