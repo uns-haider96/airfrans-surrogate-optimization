@@ -4,6 +4,8 @@ Neural-network surrogates trained on the [AirfRANS](https://airfrans.readthedocs
 
 **Author:** Muhammad Uns Haider Shah
 
+📄 **Full technical write-up:** [`writeup/writeup.md`](writeup/writeup.md)
+
 ---
 
 ## Problem statement
