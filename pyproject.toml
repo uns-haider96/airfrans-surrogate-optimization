@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airfrans-surrogate"
+version = "0.2.0"
+description = "Shared helpers for the AirfRANS surrogate shape-optimization notebooks"
+authors = [{ name = "Muhammad Uns Haider Shah" }]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "torch", "airfrans==0.1.5.1"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

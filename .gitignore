@@ -1,0 +1,7 @@
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+# Local runs outside Colab (USE_DRIVE = False)
+notebooks/airfrans_data/
+notebooks/work/
