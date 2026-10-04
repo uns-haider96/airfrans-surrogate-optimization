@@ -39,7 +39,7 @@ The AirfRANS *scarce* task: 200 two-dimensional, steady, incompressible RANS sim
 | 3 | `03_shape_optimization.ipynb` | Shape optimization: Bayesian optimization, random-search control, and gradient-based search using automatic differentiation through the network and the parameterisation |
 | 4 | `04_trust_and_extrapolation.ipynb` | Trust study: position relative to the data, stability under resampling, controlled extrapolation, documented failure regime |
 
-All notebooks run end to end on Google Colab. Phases 1 and 1b use a GPU; the rest run on CPU. The dataset is cached in Google Drive after first download, and long computations checkpoint to Drive so an interrupted session resumes.
+All notebooks run end to end on Google Colab. Phases 1, 1b and 2 use a GPU; the rest run on CPU. The dataset is cached in Google Drive after first download, and long computations checkpoint to Drive so an interrupted session resumes.
 
 ## Results
 
@@ -69,7 +69,7 @@ Predicted fields are integrated to forces using the benchmark's own post-process
 | drag rank correlation | 0.075 |
 | drag ordering, comparable pairs | 0.63 (chance = 0.5) |
 
-The cause is physical, not a coding error. Viscous drag is 68 % of total drag and is computed from the velocity gradient across a first cell about 2 µm thick; a smooth network cannot resolve that layer. Enforcing the exact no-slip condition at the wall changed nothing, which locates the error in the nodes just above the wall. Pressure drag fails for a different reason: it is a small residual of large, nearly cancelling pressure forces, and still carries a 60 % median error even where surface pressure is accurate. Every model in the published benchmark fails on drag in the same way (rank correlations of −0.12 to −0.14).
+The cause is physical, not a coding error. Viscous drag is 68 % of total drag and is computed from the velocity gradient across a first cell about 2 µm thick; a smooth network cannot resolve that layer. Enforcing the exact no-slip condition at the wall changed nothing, which locates the error in the nodes just above the wall. Pressure drag fails for a different reason: it is a small residual of large, nearly cancelling pressure forces, and still carries a 60 % median error even where surface pressure is accurate. Every model in the published benchmark also fails to rank drag (rank correlations of −0.12 to −0.14), although on the size of the drag error this work is four to five times worse (mean relative error 18.2 against 3.5–4.3, table below).
 
 Against the published baselines (single training run here, five-run means in the paper):
 
@@ -92,7 +92,7 @@ Regressing lift and log-drag directly from shape, incidence and Reynolds number 
 | drag rank correlation | 0.075 | 0.998 | **0.999** |
 | L/D rank correlation | 0.883 | 0.997 | **0.999** |
 | drag ordering, comparable & distinguishable pairs | 0.66 | 0.995 | **1.000** |
-| within ±2σ of predicted uncertainty | – | 55 % | **91 %** |
+| log-drag within ±2σ of predicted uncertainty | – | 55 % | **91 %** |
 
 The Gaussian process is both more accurate and better calibrated; the ensemble spread underestimates its own error. Learned length scales identify incidence and thickness as the dominant drivers of drag, then camber near 20 % and 80 % chord, with Reynolds number only weakly influential over this range.
 
@@ -100,41 +100,43 @@ The Gaussian process is both more accurate and better calibrated; the ensemble s
 
 Maximising L/D at Re = 4 × 10⁶ and α = 4°, with thickness constrained to ≥ 12 %:
 
-| method | surrogate evaluations | best L/D | vs. 200,000-point reference |
-|---|---|---|---|
-| Bayesian optimization | 50 | 91.73 | −0.03 % |
-| random search (same budget) | 50 | 88.89 | +3.07 % |
-| gradient-based, 20 starts | 176 (8.8 per start) | 92.01 | −0.33 % |
+| method | surrogate evaluations | best L/D | vs. 200,000-point reference | same design rated by the GP |
+|---|---|---|---|---|
+| Bayesian optimization | 50 | 91.73 | −0.03 % | 91.28 |
+| random search (same budget) | 50 | 88.89 | +3.07 % | 87.37 |
+| gradient-based, 20 starts | 176 (8.8 per start) | 92.01 | −0.33 % | 87.73 |
+
+All three searches optimise the neural-network ensemble. Rated by the Gaussian process, the more accurate surrogate, the Bayesian-optimization design comes first and the gradient-based optimum is barely better than random search.
 
 Lift-constrained drag minimisation behaved the same way, with the constraint active at exactly CL = 0.800. A single gradient-based search is about six times cheaper than the Bayesian run, but one of the 20 starts converged to L/D = 76 instead of 92, so restarts are necessary. Gradients come from automatic differentiation through the network and through the camber-line formula; no adjoint solver and no finite differences are involved. The sensitivities agree with central finite differences to seven decimal places.
 
-### The optimum's performance is robust; its location is not
+### Neither the optimum's location nor its rated performance is stable
 
 Retraining the surrogate on eight random 80 % subsets and repeating the optimization:
 
-* L/D at the optimum: 93.8 ± 1.6; lift-constrained drag: 0.0099 ± 0.0001.
+* Each retrained surrogate rates its own optimum at L/D = 93.8 ± 1.6 (lift-constrained drag 0.0099 ± 0.0001), but these ratings are biased upward, because each optimizer picks the point where its own surrogate is most optimistic. Rating one fixed design, the full-data optimum, the retrained surrogates give L/D = 91.9 ± 4.2, from 83.6 to 96.0.
 * The optimal design itself moves substantially: camber from 4.8 to 7.0 and camber position from 4.2 to 6.9, roughly 14–20 % of the design range.
-* Thickness sat on the 12 % lower bound in every single run.
-* Two surrogates trained on the same data disagree by about 4 % on the value of a given optimum, while the optimizers compete over differences of 0.3 %.
+* Thickness sat on the 12 % lower bound in every single run, and the full-data optimum also sits on the upper bound of camber position, the largest value among the training designs.
+* Two surrogates trained on the same data agree within 0.5 % at the Bayesian-optimization design but differ by 4.7 % at the gradient-based one, while the optimizers compete over differences of 0.3 %.
 
-The surrogate identifies a **family** of near-equivalent designs rather than a unique optimum, and the binding constraint is structural, not aerodynamic.
+The surrogate identifies a **family** of near-equivalent designs rather than a unique optimum, and what binds is the thickness constraint and the edges of the training data, not aerodynamics.
 
-### Uncertainty tracks distance from the data, not changes of flow regime
+### Uncertainty tracks some extrapolation, and misses a change of flow regime
 
 Narrowing the training band deliberately and testing outside it:
 
-| band narrowed in | drag error inside | near outside | far outside | error / predicted σ, far |
-|---|---|---|---|---|
-| Reynolds number | 0.8 % | 1.3 % | 2.4 % | 0.89 |
-| angle of attack | 0.3 % | 0.5 % | 4.0 % | 1.60 |
+| band narrowed in | drag error inside | near outside | far outside | predicted σ of log CD, inside → far | error / predicted σ, far |
+|---|---|---|---|---|---|
+| Reynolds number | 0.8 % | 1.3 % | 2.4 % | 0.029 → 0.026 | 0.89 |
+| angle of attack | 0.3 % | 0.5 % | 4.0 % | 0.005 → 0.032 | 1.60 |
 
-Predicted uncertainty grows along with the error, so it is a usable stopping signal. The exception is decisive: the worst-predicted case in the dataset is a 5.2 %-thick airfoil at −4.4° incidence whose flow separates along the lower surface. Its drag is 4.1× the training median and 93 % pressure drag (typically 33 %), the surrogate under-predicts it by 80 %, and the error is **139× the predicted uncertainty**. Only 7 of 200 training cases lie in that region of the design space.
+For angle of attack, predicted uncertainty grows with the error, so it is a usable stopping signal. For Reynolds number it does not: the error triples while σ stays flat, and the ratio stays below one only because σ was already large inside the band. The exception is decisive: the worst-predicted unseen case is a validation case, a 5.2 %-thick airfoil at −4.4° incidence whose velocity field shows a low-speed region along the whole lower surface, consistent with separation. Its drag is 4.1× the training median and 93 % pressure drag (typically 33 %), the surrogate under-predicts it by 80 %, and the error is **139× the predicted uncertainty**. Only six other cases among the 200 scarce simulations are thinner than 8 % at negative incidence. This is a single case, and separation is judged from the flow field rather than measured.
 
-A surrogate's confidence bounds its interpolation error. It cannot see a change of flow regime, because the inputs look ordinary.
+A surrogate's confidence bounds part of its interpolation error. It cannot see a change of flow regime, because the inputs look ordinary.
 
 ## Conclusion
 
-A cheap data-driven surrogate narrows a design space quickly: both optimization problems were solved in seconds to within a fraction of a percent of the surrogate's own optimum. It cannot certify the result. Surrogate-to-surrogate disagreement and the movement of the optimum under resampling both exceed the gains the optimizer is chasing, and confidence collapses where the flow physics changes rather than where the inputs become unusual.
+A cheap data-driven surrogate narrows a design space quickly: both optimization problems were solved in seconds to within a fraction of a percent of the surrogate's own optimum. It cannot certify the result. Surrogate-to-surrogate disagreement and the movement of the optimum under resampling both exceed the gains the optimizer is chasing, predicted confidence tracks extrapolation in incidence but not in Reynolds number, and it collapses where the flow physics changes rather than where the inputs become unusual.
 
 The defensible use is mixed-fidelity: surrogate-based exploration to identify a family of candidate designs, followed by high-fidelity verification. Where gradient-based refinement is wanted at high fidelity, an adjoint formulation is the appropriate tool, since its cost is essentially independent of the number of design variables, which is precisely the regime where surrogate-based optimization stops being viable.
 
@@ -144,6 +146,7 @@ The defensible use is mixed-fidelity: surrogate-based exploration to identify a 
 * **Dimensionality.** Three design variables. Surrogate-based optimization is viable here and degrades as the design space grows, because the sample count required rises sharply with dimension. Adjoint methods exist for the opposite regime.
 * **Parametric family.** The direct force surrogates apply only to NACA 4- and 5-digit airfoils at the trained conditions. They are not field predictors and do not generalise to arbitrary geometries, unlike the benchmark's published models.
 * **No high-fidelity verification.** No new CFD was run. The optima are supported by resampling stability, surrogate agreement, uncertainty estimates and the nearest simulations in the dataset, none of which substitutes for a verification run.
+* **One documented failure.** The regime-change argument rests on a single separated case.
 * **Single training runs.** Published baselines report means over five runs. Numbers here come from single runs and carry corresponding run-to-run uncertainty.
 * **Leakage in the benchmark splits.** The `reynolds` and `aoa` splits are drawn from the same 1000 simulations as the `full` task; 88 of 496 cases belonged to this model's training set and were removed before evaluation.
 
